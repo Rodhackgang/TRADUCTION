@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE-edge" />
@@ -13,7 +13,7 @@
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
     <link rel="stylesheet" href="styles/style.css" />
-    <title>Language Translator</title>
+    <title>Traducteur de langue</title>
   </head>
   <body>
     <div class="mode">
@@ -21,24 +21,24 @@
         <div class="toggle-track">
           <input type="checkbox" class="toggle-checkbox" id="dark-mode-btn" />
           <span class="toggle-thumb"></span>
-          <img src="images/sun.png" alt="" />
-          <img src="images/moon.png" alt="" />
+          <img src="images/sun.png" alt="soleil" />
+          <img src="images/moon.png" alt="lune" />
         </div>
       </label>
     </div>
     <div class="container">
       <div class="card input-wrapper">
         <div class="from">
-          <span class="heading">From :</span>
+          <span class="heading">De :</span>
           <div class="dropdown-container" id="input-language">
             <div class="dropdown-toggle">
               <ion-icon name="globe-outline"></ion-icon>
-              <span class="selected" data-value="auto">Auto Detect</span>
+              <span class="selected" data-value="auto">Détection automatique</span>
               <ion-icon name="chevron-down-outline"></ion-icon>
             </div>
             <ul class="dropdown-menu">
-              <li class="option active">DropDown Menu Item 1</li>
-              <li class="option">DropDown Menu Item 2</li>
+              <li class="option active">Français</li>
+              <li class="option">Anglais (É.-U.)</li>
             </ul>
           </div>
         </div>
@@ -47,14 +47,17 @@
             id="input-text"
             cols="30"
             rows="10"
-            placeholder="Enter your text here"
+            placeholder="Saisissez votre texte"
           ></textarea>
+          <button id="voice-input" class="voice-btn">
+            <ion-icon name="mic-outline"></ion-icon>
+          </button>
           <div class="chars"><span id="input-chars">0</span> / 5000</div>
         </div>
         <div class="card-bottom">
-          <p>Or choose your document!</p>
+          <p>Ou choisissez un document !</p>
           <label for="upload-document">
-            <span id="upload-title">Choose File</span>
+            <span id="upload-title">Choisir un fichier</span>
             <ion-icon name="cloud-upload-outline"></ion-icon>
             <input type="file" id="upload-document" hidden />
           </label>
@@ -69,16 +72,16 @@
 
       <div class="card output-wrapper">
         <div class="to">
-          <span class="heading">To :</span>
+          <span class="heading">À :</span>
           <div class="dropdown-container" id="output-language">
             <div class="dropdown-toggle">
               <ion-icon name="globe-outline"></ion-icon>
-              <span class="selected" data-value="en">Englsih</span>
+              <span class="selected" data-value="en">Anglais</span>
               <ion-icon name="chevron-down-outline"></ion-icon>
             </div>
             <ul class="dropdown-menu">
-              <li class="option active">DropDown Menu Item 1</li>
-              <li class="option">DropDown Menu Item 2</li>
+              <li class="option active">Anglais</li>
+              <li class="option">Français</li>
             </ul>
           </div>
         </div>
@@ -86,18 +89,58 @@
           id="output-text"
           cols="30"
           rows="10"
-          placeholder="Translated text will appear here"
+          placeholder="Le texte traduit apparaîtra ici"
           disabled
         ></textarea>
         <div class="card-bottom">
-          <p>Download as a document!</p>
+          <p>Télécharger en document !</p>
           <button id="download-btn">
-            <span>Download</span>
+            <span>Télécharger</span>
             <ion-icon name="cloud-download-outline"></ion-icon>
           </button>
         </div>
       </div>
     </div>
+
+    <script>
+      // Script de reconnaissance vocale (Speech-to-Text)
+
+      const voiceBtn = document.getElementById('voice-input');
+      const inputText = document.getElementById('input-text');
+
+      // Fonction pour démarrer la reconnaissance vocale
+      if ('webkitSpeechRecognition' in window) {
+        const recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'fr-FR'; // Langue française
+
+        // Démarre la reconnaissance vocale lorsqu'on clique sur l'icône du micro
+        voiceBtn.addEventListener('click', () => {
+          recognition.start();
+          voiceBtn.classList.add('recording'); // Optionnel : ajouter une classe pour signaler l'enregistrement
+        });
+
+        // Lorsque la reconnaissance est terminée, insérer le texte dans le champ
+        recognition.onresult = (event) => {
+          const result = event.results[0][0].transcript;
+          inputText.value = result; // Insérer le texte dans le champ
+        };
+
+        // En cas d'erreur
+        recognition.onerror = () => {
+          voiceBtn.classList.remove('recording');
+        };
+
+        // Lorsque la reconnaissance se termine
+        recognition.onend = () => {
+          voiceBtn.classList.remove('recording');
+        };
+      } else {
+        // Si la reconnaissance vocale n'est pas supportée
+        voiceBtn.style.display = 'none';
+      }
+    </script>
 
     <script src="script/languages.js"></script>
     <script src="script/script.js"></script>

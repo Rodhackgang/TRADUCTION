@@ -363,3 +363,41 @@ body.dark {
     transform: rotate(90deg);
   }
 }
+
+.voice-btn {
+  background-color: blue; 
+  border: none;
+  border-radius: 50%; 
+  padding: 15px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-bottom: 10px;
+}
+
+.voice-btn:hover {
+  background-color: #356aff; 
+  transform: scale(1.1); 
+}
+
+.voice-btn:active {
+  transform: scale(0.9); 
+}
+
+.voice-btn ion-icon {
+  font-size: 24px; 
+  color: white;
+  transition: color 0.3s ease; 
+}
+
+.voice-btn.recording ion-icon {
+  color: #ffcc00; 
+}
+
+.voice-btn:hover ion-icon {
+  color: #ffffff; 
+}
+
+
